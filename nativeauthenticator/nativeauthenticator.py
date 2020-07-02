@@ -12,6 +12,7 @@ from traitlets import Bool, Integer, Unicode
 from .handlers import (AuthorizationHandler, ChangeAuthorizationHandler,
                        ChangePasswordHandler, LoginHandler, SignUpHandler)
 from .orm import UserInfo
+import mysql.connector as mydb
 
 
 class NativeAuthenticator(Authenticator):
@@ -201,6 +202,18 @@ class NativeAuthenticator(Authenticator):
             user_info = UserInfo(**infos)
         except AssertionError:
             return
+
+        conn = mydb.connect(
+            host='localhost',
+            port='3306',
+            user='root',
+            password='wataru0224',
+            database='info_system'
+        )
+        cur = conn.cursor()
+        cur.execute("INSERT INTO students (username) VALUES (%s)", (username))
+        cur.close()
+        conn.close()
 
         self.db.add(user_info)
         self.db.commit()
