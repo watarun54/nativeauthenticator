@@ -211,7 +211,7 @@ class NativeAuthenticator(Authenticator):
             database='info_system'
         )
         cur = conn.cursor()
-        cur.execute("INSERT INTO students (username) VALUES (%s)", (username))
+        cur.execute("INSERT INTO students (username) VALUES (%(username)s)", {'username': username})
         cur.close()
         conn.close()
 
